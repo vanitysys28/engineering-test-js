@@ -15,24 +15,25 @@ function checkCurrentOrdersQuantity(value) {
 
 app.post('/order', function (req, res) {
 	let id = req.query.id;
+	let time = new Date();
 	let drink = req.query.drink;
 	let quantity = Number(req.query.quantity);	
 	let drinks = orders.filter(drinks => drinks.drink === "DRINK")
 	let beers = orders.filter(beers => beers.drink === "BEER")
 	
-	async function prepareDrink(id) {
-	await setTimeout(function(){orders = orders.filter(drinks => drinks.id != id)}, delay);
+	async function prepareDrink(x) {
+	await setTimeout(function(){orders = orders.filter(order => order.time != x)}, delay);
 	}
 
 	if (drink === "BEER" & checkCurrentOrdersQuantity(beers) + quantity <= 2 & checkCurrentOrdersQuantity(drinks) <= 0) {
-	orders.push({"id":id,"drink":drink,"quantity":quantity})
-	history.push({"id":id,"drink":drink,"quantity":quantity})
-	prepareDrink(id)
+	orders.push({"time":time,"id":id,"drink":drink,"quantity":quantity})
+	history.push({"time":time,"id":id,"drink":drink,"quantity":quantity})
+	prepareDrink(time)
 	res.status(200).json({msg: "Order accepted", orders});
 	} else if (drink === "DRINK" & checkCurrentOrdersQuantity(drinks) + quantity <= 1 & checkCurrentOrdersQuantity(beers) <= 0) {
-	orders.push({"id":id,"drink":drink,"quantity":quantity})
-	history.push({"id":id,"drink":drink,"quantity":quantity})
-	prepareDrink(id)
+	orders.push({"time":time,"id":id,"drink":drink,"quantity":quantity})
+	history.push({"time":time,"id":id,"drink":drink,"quantity":quantity})
+	prepareDrink(time)
 	res.status(200).json({msg: "Order accepted", orders});
 	} else {
 	res.status(429).json({msg: "Order can't be processed"});
