@@ -1,12 +1,11 @@
 const express = require('express');
 const app = express();
-app.use(express.json());
 
 let history = [] 
 let orders = []
 let delay = 5000
 
-function checkQuantity(value) {
+function checkCurrentOrdersQuantity(value) {
 	let quantities = 0
 	for (let i = 0; i < value.length ;i++) {
 	quantities = quantities + value[i].quantity
@@ -25,18 +24,18 @@ app.post('/order', function (req, res) {
 	await setTimeout(function(){orders = orders.filter(drinks => drinks.id != id)}, delay);
 	}
 
-	if (drink === "BEER" & checkQuantity(beers) + quantity <= 2 & checkQuantity(drinks) <= 0) {
+	if (drink === "BEER" & checkCurrentOrdersQuantity(beers) + quantity <= 2 & checkCurrentOrdersQuantity(drinks) <= 0) {
 	orders.push({"id":id,"drink":drink,"quantity":quantity})
 	history.push({"id":id,"drink":drink,"quantity":quantity})
 	prepareDrink(id)
 	res.status(200).json({msg: "Order accepted", orders});
-	} else if (drink === "DRINK" & checkQuantity(drinks) + quantity <= 1 & checkQuantity(beers) <= 0) {
+	} else if (drink === "DRINK" & checkCurrentOrdersQuantity(drinks) + quantity <= 1 & checkCurrentOrdersQuantity(beers) <= 0) {
 	orders.push({"id":id,"drink":drink,"quantity":quantity})
 	history.push({"id":id,"drink":drink,"quantity":quantity})
 	prepareDrink(id)
 	res.status(200).json({msg: "Order accepted", orders});
 	} else {
-	res.status(429).json({msg: "Order can't be processed."});
+	res.status(429).json({msg: "Order can't be processed"});
 	}
 });
 
