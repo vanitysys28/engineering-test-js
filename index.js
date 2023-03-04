@@ -20,9 +20,14 @@ app.post('/order', function (req, res) {
 	let quantity = Number(req.query.quantity);	
 	let drinks = orders.filter(drinks => drinks.drink === "DRINK")
 	let beers = orders.filter(beers => beers.drink === "BEER")
-	
+
+	if (req.query.delay != null) {
+	modifiedDelay = req.query.delay
+	} else {
+	modifiedDelay = delay }
+
 	async function prepareDrink(x) {
-	await setTimeout(function(){orders = orders.filter(order => order.time != x)}, delay);
+	await setTimeout(function(){orders = orders.filter(order => order.time != x)}, modifiedDelay);
 	}
 
 	if (drink === "BEER" & checkCurrentOrdersQuantity(beers) + quantity <= 2 & checkCurrentOrdersQuantity(drinks) <= 0) {
