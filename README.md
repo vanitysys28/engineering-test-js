@@ -2,8 +2,8 @@
 ## Initialization
     npm run server
 
-## POST Request Example
+## Drinks Ordering
     localhost:5500/order?id=2&drink=BEER&quantity=2
 
-## GET Request Example
+## Order History
     localhost:5500/history
